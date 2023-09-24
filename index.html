@@ -7,10 +7,12 @@
   <div id="data-container"></div>
   <script>
     // Remplacez par l'URL de votre Google Sheet
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSn_9dh6hesCWnyc0qDh5oryYjwJq4PCOW6ZoavNxNh-a5em5lnMh5lpdqfAYld4rZPXGelzH32HieC/pub?output=csv';
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBMKiNDRK0N4MoWCQa5oAsy9XW-WhVM4QYZB1mF3Cyn8xQtQpzW7DvRU0ljL3apr0ZaRSrrkCONskh/pub?output=csv';
 
-    // Fonction pour convertir un lien Google Drive en un lien affichable
-    
+    function getGoogleDriveFileID(url) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)(?:\/|$)/);
+      return match ? match[1] : null;
+    }
 
     // Fetch data from Google Sheet
     fetch(sheetURL)
@@ -26,27 +28,21 @@
 
           // Assuming the columns are in this order: nom, prenom, photo, heure
           const Nom = columns[1];
-          const prenom = columns[2];
-          const photo = columns[3]; // Lien vers la photo sur Google Drive
-           function convertDriveLink(link) {
-      const fileID = link.match(/id=([a-zA-Z0-9_-]+)/);
-      if (fileID) {
-        return `https://drive.google.com/uc?export=view&id=${fileID[1]}`;
-      }
-      return ''; // Retourne une chaîne vide si le lien n'est pas valide
-    }
+          const mail = columns[2];
+          const film = columns[3]
+          const photo = columns[4]; // Lien vers la photo sur Google Drive
 
-          // Convertir le lien Google Drive en un lien affichable
-          const photoLink = convertDriveLink(photo);
+          // Skip the 'heure' column (columns[3])
 
-          // Créez un élément d'image et définissez l'attribut 'src' sur le lien correct
+          // Créez un élément d'image et définissez l'attribut 'src' sur le lien correct pour Google Drive
           const img = document.createElement('img');
-          img.src = photoLink; // Utilisez le lien affichable
-          img.alt = 'Photo';
+          img.src = `https://drive.google.com/uc?export=view&id=${getGoogleDriveFileID(photo)}`;
+          img.alt = 'Photos';
+
 
           // Afficher les données sur votre page web comme désiré
           const div = document.createElement('div');
-          div.innerHTML = `noms: ${Nom}<br>prenom: ${prenom}<br><br>prenom: ${photoLink}<br>` ;
+          div.innerHTML = `Nom: ${Nom}<br>Email: ${mail}<br>Votre film prefere est: : ${film}<br> Photo: ${photo}<br>` ;
           div.appendChild(img); // Ajoutez l'image à la div
           container.appendChild(div);
         }
@@ -54,6 +50,12 @@
       .catch(error => {
         console.error('Error fetching data:', error);
       });
+
+    // Fonction pour extraire l'ID du fichier Google Drive depuis le lien
+    function getGoogleDriveFileID(url) {
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)(?:\/|$)/);
+      return match ? match[1] : null;
+    }
   </script>
 </body>
 </html>
