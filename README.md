@@ -1,2 +1,2 @@
 # TP-form
-anasely.github.io/TP-form
+https://anasely.github.io/TP-form/
