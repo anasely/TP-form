@@ -25,11 +25,7 @@
     // Remplacez par l'URL de votre Google Sheet
     const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBMKiNDRK0N4MoWCQa5oAsy9XW-WhVM4QYZB1mF3Cyn8xQtQpzW7DvRU0ljL3apr0ZaRSrrkCONskh/pub?output=csv';
 
-    function getGoogleDriveFileID(url) {
-      const match = url.match(/id=([a-zA-Z0-9-_]+)/);
-      console.log(url)
-      return match ? match[1] : null;
-    }
+  
 
     // Fetch data from Google Sheet
     fetch(sheetURL)
@@ -48,14 +44,21 @@
           const mail = columns[2];
           const film = columns[3]
           const photo = columns[4]; // Lien vers la photo sur Google Drive
-          const imgId = photo.match(/id=([a-zA-Z0-9-_]+)/)[1]
-          // Skip the 'heure' column (columns[0])
+          const jouer = columns[5];
+          const club = columns[6];
+
+          const imgId = photo.split('id=')[1];
+
+          // Skip the 'heure' column (columns[3])
 
           // Créez un élément d'image et définissez l'attribut 'src' sur le lien correct pour Google Drive
           const img = document.createElement('img');
-          img.className = 'text-center img-fluid mx-auto';
-          img.src = `https://drive.google.com/uc?export=view&id=${imgId}`;
+          img.className = 'text-center img-fluid mx-auto d-block';
+          img.src = `https://drive.google.com/uc?id=${imgId}`;
           img.alt = 'Photos';
+          img.style = 'height:200px; object-fit:cover;';
+
+
 
 
           // Create a div with class "col-4"
@@ -71,11 +74,21 @@
 
           const filmP = document.createElement('p');
           filmP.innerHTML = `Film prefere est: ${film}`;
+          
+          const jouerP = document.createElement('p');
+          jouerP.innerHTML = `jouer prefere est: ${jouer}`;
+
+          
+          const clubP = document.createElement('p');
+          clubP.innerHTML = `club prefere est: ${club}`;
+          
 
           divCol4.appendChild(img);
           divCol4.appendChild(nomP);
           divCol4.appendChild(emailP);
           divCol4.appendChild(filmP);
+          divCol4.appendChild(jouerP);
+          divCol4.appendChild(clubP);
 
           const divWrapper = document.createElement('div');
           divWrapper.className = 'col-4';
@@ -89,11 +102,7 @@
         console.error('Error fetching data:', error);
       });
 
-    // Fonction pour extraire l'ID du fichier Google Drive depuis le lien
-    function getGoogleDriveFileID(url) {
-      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)(?:\/|$)/);
-      return match ? match[1] : null;
-    }
+
   </script>
 </body>
 
